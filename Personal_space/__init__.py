@@ -9,7 +9,7 @@ from config import config_dict
 pymysql.install_as_MySQLdb()
 from flask_wtf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
-
+from utils.commons import RouteConverter
 
 db = SQLAlchemy()
 redis_storage = None
@@ -17,10 +17,11 @@ redis_storage = None
 def create_app(config_name):
 	config_cls = config_dict[config_name]
 	# 创建app
-	app = Flask(__name__)
+	app = Flask(__name__,)
 
 	# 添加配置类
 	app.config.from_object(config_cls)
+	app.url_map.converters['re']=RouteConverter
 
 	# 创建数据库关系映射对象
 	db.init_app(app)
@@ -32,8 +33,11 @@ def create_app(config_name):
 	# csrf防护
 	CSRFProtect(app)
 
-	#注册蓝图
+	#注册api接口蓝图
 	from Personal_space.api import api
 	app.register_blueprint(api,url_prefix='/api/v1.0')
+	#注册html接口蓝图
+	from Personal_space.web_html import html
+	app.register_blueprint(html)
 
 	return app

@@ -18,7 +18,7 @@ class Config(object):
 	SESSION_KEY_PREFIX = 'session='  # redis存储前缀
 	SESSION_REDIS = redis.StrictRedis(host=REDIS_IP, port=REDIS_PORT)
 	SESSION_USE_SIGNER = True  # 签名加密
-	PERMANENT_SESSION_LIFETIME = 60*60*24  #过期时间
+	PERMANENT_SESSION_LIFETIME = 60*60  #过期时间
 
 
 	# 配置SQLALchemy
