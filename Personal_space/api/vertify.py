@@ -8,6 +8,8 @@ from Personal_space import redis_storage
 from Personal_space import constants
 from Personal_space.response_code import RET
 import random
+from Personal_space.utils.sms import SendSms
+import re
 
 
 @api.route('/image_code')
@@ -36,12 +38,13 @@ def generate_img_code():  # 获取图片验证码
 @api.route('/sms_code', methods=['POST'])
 def send_sms_code():  # 发送短信验证码
 	'''
-	1.获取手机号,图片验证码,进行校验
-	2.生成短信验证码
-	3.保存短信验证码到redis
-	4.返回响应
-	:return: 
+	.获取手机号,图片验证码,进行校验
+	.生成短信验证码
+	.发送短信验证码
+	.保存短信验证码到redis
+	.返回响应
 	'''
+	print ('请求成功')
 	resp_dict = request.json
 	mobile = resp_dict.get('mobile')
 	img_code = resp_dict.get('img_code')
@@ -49,10 +52,12 @@ def send_sms_code():  # 发送短信验证码
 	# 判断参数有效性
 	if not all([mobile, img_code, img_code_id]):
 		return jsonify(errno=RET.PARAMERR, errmsg='参数有误')
+	#判断手机号有效性
+	if not re.match(r'^1[34578]\d{9}$',mobile):
+		return jsonify(errno=RET.PARAMERR, errmsg='手机号码错误')
 	# 从redis中获取图片验证码校验
 	try:
 		image_code = redis_storage.get('imageCode:%s' %img_code_id)
-		print image_code
 	except Exception as e:
 		current_app.logger.error(e)
 		return jsonify(errno=RET.DBERR, errmsg='查询redis中图片验证码信息失败')
@@ -64,10 +69,24 @@ def send_sms_code():  # 发送短信验证码
 		return jsonify(errno=RET.DATAERR, errmsg='输入的验证码不一致')
 	#生成短信验证码
 	sms_code = "%06d"%random.randint(1,9999)
+	current_app.logger.info("短信验证码为:"+sms_code)
 	#使用第三方云通讯发送短信验证码
 	try:
+		# SendSms().send_sms(mobile,[sms_code,constants.SMS_CODE_REDIS_EXPIRES/60],1)
 		pass
 	except Exception as e:
 		current_app.logger.error(e)
+		return jsonify(errno=RET.THIRDERR, errmsg='发送短信验证码失败')
+	#将短信验证码保存到redis中,表单提交时验证
+	try:
+		redis_storage.set('mobile:%s'%mobile,sms_code,constants.SMS_CODE_REDIS_EXPIRES)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(errno=RET.DBERR, errmsg='短信验证码存储失败')
+	# 返回响应
+	return jsonify(errno=RET.OK, errmsg='ok')
+
+
+
 
 

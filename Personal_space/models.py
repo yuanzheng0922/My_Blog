@@ -5,12 +5,12 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User(object):
+class User(db.Model):
 	'''用户表'''
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key=True)  # 用户id
 	name = db.Column(db.String(32), unique=True, nullable=False)  # 用户name
-	password_hash = db.Column(db.Integer, unique=True, nullable=False)  # 用户密码加密
+	password_hash = db.Column(db.String(128), unique=True, nullable=False)  # 用户密码加密
 	mobile = db.Column(db.Integer, unique=True, nullable=False)  # 电话号码
 	real_name = db.Column(db.String(32))  # 真实姓名
 	id_card = db.Column(db.String(20))  # 身份证号
@@ -46,7 +46,7 @@ class User(object):
 		return resp
 
 
-class Photo(object):
+class Photo(db.Model):
 	'''相册'''
 	__tablename__ = 'pic'
 	id = db.Column(db.Integer, primary_key=True)
@@ -61,7 +61,7 @@ class Photo(object):
 		}
 		return resp
 
-class Article(object):
+class Article(db.Model):
 	'''文章'''
 	__tablename__ = 'article'
 	id = db.Column(db.Integer, primary_key=True)

@@ -41,10 +41,49 @@ function sendSMSCode() {
         $(".phonecode-a").attr("onclick", "sendSMSCode();");
         return;
     }
-
+    var params = {
+        "mobile":mobile,
+        "img_code":imageCode,
+        "img_code_id":imageCodeId
+    };
     // TODO: 通过ajax方式向后端接口发送请求，让后端发送短信验证码
     $.ajax({
-        "url":"",
+        "url":"/api/v1.0/sms_code",
+        "type":'post',
+        "data":JSON.stringify(params),
+        "contentType":"application/json",
+        "headers":{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        "success":function (resp) {
+            //成功
+            console.log('成功从后端返回');
+            if (resp.errno == "0"){
+                alert('发送成功,请查看手机')
+                // 设置倒计时
+                var num = 60;
+                var rid = setInterval(function () {
+                    num -= 1;
+                    if (num <= 0){
+                        clearInterval(rid);  //清除定时器
+                        $('.phonecode-a').html('获取短信码');
+                        $(".phonecode-a").attr("onclick", "sendSMSCode();");
+                    }else
+                    {
+                        $('.phonecode-a').html(num + '秒')
+                    }
+                },1000)
+            }
+            else
+            {
+                $("#phone-code-err>span").html(resp.errmsg);
+                $("#phone-code-err").show();
+                //重新刷新点击获取sms_code事件
+                $(".phonecode-a").attr('onclick',sendSMSCode())
+            }
+
+        }
+
 
     })
 }
@@ -68,5 +107,38 @@ $(document).ready(function() {
         $("#password2-err").hide();
     });
 
+
     // TODO: 注册的提交(判断参数是否为空)
+    $('.form-register').submit(function (e) {
+        //阻止表单默认提交
+        e.preventDefault();
+        var mobile = $("#mobile").val();
+        var password=$("#password").val();
+        var rpassword=$("#password2").val();
+
+        var params = {
+            "mobile": mobile,
+            "password":password ,
+            "rpassword":rpassword
+         };
+        $.ajax({
+            "url":"/api/v1.0/form_user",
+            "type":"post",
+            "contentType":"application/json",
+            "data":JSON.stringify(params),
+            "headers":{
+                "X-CSRFToken":getCookie("csrf_token")
+            },
+            "success":function (resp) {
+                if(resp.errno == "0"){
+                    location.href = 'my.html'
+                }else{
+                    alert('提交失败,请核实填入信息')
+                }
+
+            }
+
+
+        })
+    })
 });

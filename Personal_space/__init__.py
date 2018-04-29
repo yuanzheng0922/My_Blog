@@ -2,13 +2,13 @@
 # @Author : yz
 # @Time   : 2018/4/28-21:41
 from flask import Flask, session
-from flask_session import Session
 import redis
 import pymysql
-from config import config_dict
 pymysql.install_as_MySQLdb()
+from flask_session import Session
 from flask_wtf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
+from config import config_dict
 from utils.commons import RouteConverter
 
 db = SQLAlchemy()
