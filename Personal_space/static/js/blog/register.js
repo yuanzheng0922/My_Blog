@@ -57,7 +57,7 @@ function sendSMSCode() {
         },
         "success":function (resp) {
             //成功
-            console.log('成功从后端返回');
+            // console.log('成功从后端返回');
             if (resp.errno == "0"){
                 alert('发送成功,请查看手机')
                 // 设置倒计时
@@ -73,13 +73,17 @@ function sendSMSCode() {
                         $('.phonecode-a').html(num + '秒')
                     }
                 },1000)
+            }else if(resp.errno == "4003"){
+                alert(resp.errmsg)
+                $(".phonecode-a").attr('onclick',"sendSMSCode()")
             }
             else
             {
                 $("#phone-code-err>span").html(resp.errmsg);
                 $("#phone-code-err").show();
                 //重新刷新点击获取sms_code事件
-                $(".phonecode-a").attr('onclick',sendSMSCode())
+                $(".phonecode-a").attr('onclick',"sendSMSCode()")
+
             }
 
         }
@@ -131,8 +135,11 @@ $(document).ready(function() {
             },
             "success":function (resp) {
                 if(resp.errno == "0"){
-                    location.href = 'my.html'
-                }else{
+                    location.href = 'login.html'
+                }else if(resp.errno == "4106"){
+                    alert(resp.errmsg)
+                }
+                else{
                     alert('提交失败,请核实填入信息')
                 }
 

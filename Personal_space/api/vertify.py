@@ -10,6 +10,7 @@ from Personal_space.response_code import RET
 import random
 from Personal_space.utils.sms import SendSms
 import re
+from Personal_space.models import User
 
 
 @api.route('/image_code')
@@ -55,6 +56,14 @@ def send_sms_code():  # 发送短信验证码
 	#判断手机号有效性
 	if not re.match(r'^1[34578]\d{9}$',mobile):
 		return jsonify(errno=RET.PARAMERR, errmsg='手机号码错误')
+	# todo 添加 先从数据库获取用户手机号,判断用户是否已经注册过
+	try:
+		ret = User.query.filter(User.mobile == mobile).count()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(errno=RET.DBERR, errmsg='数据库查询用户手机号失败')
+	if ret > 0:
+		return jsonify(errno=RET.DATAEXIST, errmsg='手机号已被注册')
 	# 从redis中获取图片验证码校验
 	try:
 		image_code = redis_storage.get('imageCode:%s' %img_code_id)
