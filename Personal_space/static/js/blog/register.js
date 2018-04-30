@@ -117,11 +117,13 @@ $(document).ready(function() {
         //阻止表单默认提交
         e.preventDefault();
         var mobile = $("#mobile").val();
+        var phonecode = $('#phonecode').val();
         var password=$("#password").val();
         var rpassword=$("#password2").val();
 
         var params = {
             "mobile": mobile,
+            "phonecode":phonecode,
             "password":password ,
             "rpassword":rpassword
          };
@@ -137,6 +139,12 @@ $(document).ready(function() {
                 if(resp.errno == "0"){
                     location.href = 'login.html'
                 }else if(resp.errno == "4106"){
+                    alert(resp.errmsg)
+                }
+                else if(resp.errno == "4004"){
+                    alert(resp.errmsg)
+                }
+                else if(resp.errno == "4002"){
                     alert(resp.errmsg)
                 }
                 else{

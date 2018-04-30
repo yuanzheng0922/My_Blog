@@ -39,6 +39,7 @@ $(document).ready(function() {
             },
             "success":function (resp) {
                 if(resp.errno == "0"){
+                    alert(resp.errmsg);
                     location.href='my.html'
                 }else{
                     alert(resp.errmsg)

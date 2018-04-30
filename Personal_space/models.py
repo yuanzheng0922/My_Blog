@@ -3,6 +3,7 @@
 # @Time   : 2018/4/28-21:42
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from Personal_space import constants
 
 
 class User(db.Model):
@@ -42,6 +43,13 @@ class User(db.Model):
 			'user_avatar_url': self.avatar_url,
 			'real_name':self.real_name,
 			'id_card':self.id_card
+		}
+		return resp
+	def user_to_dict(self):
+		resp = {
+			'user_name': self.name,
+			'user_mobile': self.mobile,
+			'avatar_url': constants.QINIU_DOMIN_PREFIX + self.avatar_url
 		}
 		return resp
 

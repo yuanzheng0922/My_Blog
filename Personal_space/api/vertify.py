@@ -78,7 +78,7 @@ def send_sms_code():  # 发送短信验证码
 		return jsonify(errno=RET.DATAERR, errmsg='输入的验证码不一致')
 	#生成短信验证码
 	sms_code = "%06d"%random.randint(1,9999)
-	current_app.logger.info("短信验证码为:"+sms_code)
+	current_app.logger.info("短信验证码为:%s"%sms_code)
 	#使用第三方云通讯发送短信验证码
 	try:
 		# SendSms().send_sms(mobile,[sms_code,constants.SMS_CODE_REDIS_EXPIRES/60],1)
