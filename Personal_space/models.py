@@ -49,7 +49,7 @@ class User(db.Model):
 		resp = {
 			'user_name': self.name,
 			'user_mobile': self.mobile,
-			'avatar_url': constants.QINIU_DOMIN_PREFIX + self.avatar_url
+			'avatar_url': constants.QINIU_DOMIN_PREFIX + (self.avatar_url if self.avatar_url else '')
 		}
 		return resp
 
