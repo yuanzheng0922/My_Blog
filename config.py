@@ -3,7 +3,7 @@
 # @Time   : 2018/4/28-21:45
 import os, base64
 import redis
-
+import logging
 
 # 自定义配置文件
 class Config(object):
@@ -18,7 +18,7 @@ class Config(object):
 	# SESSION_KEY_PREFIX = 'session='  # redis存储前缀
 	SESSION_REDIS = redis.StrictRedis(host=REDIS_IP, port=REDIS_PORT)
 	SESSION_USE_SIGNER = True  # 签名加密
-	PERMANENT_SESSION_LIFETIME = 60*60*24  #过期时间
+	PERMANENT_SESSION_LIFETIME = 60*60  #过期时间
 
 
 	# 配置SQLALchemy
@@ -28,11 +28,15 @@ class Config(object):
 class Development_Env(Config):
 	'''开发环境'''
 	DEBUG = True
+	LOG_LEVEL = logging.DEBUG
 
 
 class Product_Env(Config):
 	'''线上环境'''
 	DEBUG = False
+
+	LOG_LEVEL = logging.WARNING
+
 
 config_dict= {
 	'Development_Env':Development_Env,

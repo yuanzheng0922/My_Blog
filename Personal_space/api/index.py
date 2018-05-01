@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 # @Author : yz
 # @Time   : 2018/4/28-23:50
-# from . import api
-#
-#
-# @api.route('/')
+from . import api
+from Personal_space.models import *
+
+# @api.route('/ceshi')
 # def index():
 # 	# session['name'] = 'value'  # 测试session
 # 	# from Personal_space import redis_storage
 # 	# redis_storage.set('hahaha','gogogo')  # 测试redis存储
+# 	ret = User.query.filter(User.id == 10).first()
+# 	print ret
 # 	return 'hello world'
 
 # import random
