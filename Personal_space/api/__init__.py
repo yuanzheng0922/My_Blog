@@ -6,4 +6,4 @@ from flask import Blueprint
 
 api = Blueprint('blog',__name__,static_url_path='/static/html')
 
-from . import index,vertify,register,profile
+from . import index,vertify,register,profile,picture

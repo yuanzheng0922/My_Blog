@@ -28,7 +28,7 @@ def get_user_info():
 		return jsonify(errno=RET.USERERR, errmsg='用户不存在')
 	# 组织数据
 	# 返回响应
-	return jsonify(errno=RET.OK, errmsg='OK', data=user.user_to_dict())
+	return jsonify(errno=RET.OK, errmsg='OK', data=user.to_dict())
 
 
 @api.route('/users_info', methods=['PUT'])
@@ -93,7 +93,7 @@ def upload_user_avatar():
 		current_app.logger.error(e)
 		return jsonify(errno=RET.DBERR, errmsg='保存头像url失败')
 
-	return jsonify(errno=RET.OK, errmsg='OK', data=user.user_to_dict())
+	return jsonify(errno=RET.OK, errmsg='OK', data=user.to_dict())
 
 
 @api.route('/auth_users', methods=["POST"])
@@ -151,6 +151,7 @@ def get_auth_user():
 	}
 	return jsonify(errno=RET.OK, errmsg='OK', data=user_info)
 
+
 @api.route('/auth_users',methods=["DELETE"])
 @login_required
 def user_logout():
@@ -158,3 +159,5 @@ def user_logout():
 	#删除session数据
 	session.clear()
 	return jsonify(errno=RET.OK, errmsg='OK')
+
+

@@ -22,7 +22,7 @@
 ##github 地址
 + https://github.com/yuanzheng0922/My_Blog.git
 ##环境部署
-+ gunicorn + nginx
++ nginx + gunicorn 
 + $gunicorn -w 4 -b 127.0.0.1:5001 运行文件名称:Flask程序实例名
 
 ##数据库

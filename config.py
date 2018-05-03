@@ -15,8 +15,8 @@ class Config(object):
 	REDIS_PORT = 6379
 	# 设置session配置项
 	SESSION_TYPE = 'redis'  #数据库类型
-	# SESSION_KEY_PREFIX = 'session='  # redis存储前缀
-	SESSION_REDIS = redis.StrictRedis(host=REDIS_IP, port=REDIS_PORT)
+	SESSION_KEY_PREFIX = 'session>>'  # redis存储前缀
+	SESSION_REDIS = redis.StrictRedis(host=REDIS_IP, port=REDIS_PORT,db=1)
 	SESSION_USE_SIGNER = True  # 签名加密
 	PERMANENT_SESSION_LIFETIME = 60*60  #过期时间
 

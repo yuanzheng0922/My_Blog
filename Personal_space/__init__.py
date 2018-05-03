@@ -46,7 +46,7 @@ def create_app(config_name):
 	db.init_app(app)
 	# 创建redis对象
 	global redis_storage
-	redis_storage = redis.StrictRedis(host=config_cls.REDIS_IP, port=config_cls.REDIS_PORT)
+	redis_storage = redis.StrictRedis(host=config_cls.REDIS_IP, port=config_cls.REDIS_PORT,db=1)
 	# session存储
 	Session(app)
 	# csrf防护
